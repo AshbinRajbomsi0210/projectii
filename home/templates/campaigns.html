@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Campaigns {% endblock %}
+{% block css %}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h2>Our Blood Donation Campaigns</h2>
+    <p class="intro-text">
+        Join us in our mission to save lives through blood donation. Check out our upcoming and past campaigns below.
+    </p>
+
+    <div class="row mt-4">
+        <!-- Campaign 1 -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <img src="{% static 'media/camp1.jpg' %}" class="card-img-top" alt="Campaign 1">
+                <div class="card-body">
+                    <h5 class="card-title">Blood Donation Drive</h5>
+                    <p class="card-text">Date: 25th February 2025<br>Location: City Hall, Compassion City</p>
+                    <a href="#" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign 2 -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <img src="{% static 'media/camp2.jpg' %}" class="card-img-top" alt="Campaign 2">
+                <div class="card-body">
+                    <h5 class="card-title">Youth Donation Camp</h5>
+                    <p class="card-text">Date: 12th March 2025<br>Location: University Campus, Knowledge Town</p>
+                    <a href="#" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <a href="#" class="btn btn-outline-primary">View All Campaigns</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

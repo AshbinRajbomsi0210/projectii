@@ -1,0 +1,92 @@
+/* main.css */
+
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+    margin: 0;
+    padding: 0;
+}
+
+/* Container styling */
+.container {
+    margin-top: 50px;
+    background-color: #ffffff; /* White background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 30px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Header styling */
+h3 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #dc3545; /* Red color for title */
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Removes space between table cells */
+    margin-bottom: 20px;
+    font-size: 1rem; /* Default font size */
+}
+
+/* Table headers */
+th {
+    background-color: #f5c6cb; /* Light red background for headers */
+    color: #721c24; /* Dark red text for headers */
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #dee2e6; /* Light gray border */
+    padding: 10px;
+}
+
+/* Table rows */
+td {
+    background-color: #ffffff; /* White background for cells */
+    color: #495057; /* Neutral text color */
+    text-align: center;
+    border: 1px solid #dee2e6; /* Light gray border */
+    padding: 10px;
+}
+
+/* Hover effect for rows */
+tr:hover td {
+    background-color: #f8d7da; /* Light red background on hover */
+    transition: background-color 0.3s ease;
+}
+
+/* Message for no blood requests */
+h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #6c757d; /* Neutral gray color */
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    th, td {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+}

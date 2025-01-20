@@ -1,0 +1,134 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Styling */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* Header */
+h1, h2 {
+    color: #0a80f5;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+/* Input Box */
+.input-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+#searchBox {
+    max-width: 600px;
+    border: 2px solid #ff6f61;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#searchBox:focus {
+    border-color: #e53935;
+    outline: none;
+}
+
+/* Card Grid */
+.album {
+    padding: 20px 0;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 20px;
+    background-color: #fff;
+    border-top: 5px solid #ff6f61;
+}
+
+.card-text {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #495057;
+}
+
+.card-text:first-child {
+    font-weight: bold;
+}
+
+.btn-group a {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    color: #fff;
+    background-color: #ff6f61;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-group a:hover {
+    background-color: #e53935;
+}
+
+/* Empty State Text */
+.text-center {
+    margin-top: 20px;
+    color: #6c757d;
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    #searchBox {
+        width: 100%;
+    }
+}

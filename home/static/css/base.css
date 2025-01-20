@@ -1,0 +1,101 @@
+/* base.css */
+
+/* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #dc3545; /* Red background for navbar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 10px 20px;
+}
+
+.navbar img {
+    border-radius: 5px;
+    margin-right: 15px; /* Space between logo and links */
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: white; /* White text color */
+    font-size: 1rem;
+    font-weight: bold;
+    margin-right: 15px; /* Spacing between links */
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107; /* Yellow on hover */
+    text-decoration: none; /* No underline on hover */
+}
+
+.navbar-toggler {
+    border: none;
+    color: white;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255,255,255,1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Navbar Welcome Message */
+.navbar-nav .nav-item.active {
+    font-size: 1.1rem;
+    color: white; /* White text */
+    font-weight: bold;
+}
+
+.navbar-nav .nav-item.active:hover {
+    color: #ffc107; /* Yellow on hover */
+}
+
+/* Navbar Collapse */
+.navbar-collapse {
+    justify-content: space-between; /* Push items to the edges */
+}
+
+.navbar-collapse .navbar-nav {
+    align-items: center;
+}
+
+/* Mobile-Friendly Adjustments */
+@media (max-width: 768px) {
+    .navbar img {
+        width: 100px;
+        height: auto;
+    }
+
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        font-size: 0.9rem;
+        margin-bottom: 10px; /* Space between links */
+    }
+
+    .navbar-collapse {
+        padding: 10px 0;
+    }
+}
+
+/* Responsive Welcome Message */
+.nav-item.welcome-message {
+    font-size: 1rem;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Utility Classes */
+.text-white {
+    color: white !important;
+}
+
+.text-yellow {
+    color: #ffc107 !important; /* Yellow */
+}

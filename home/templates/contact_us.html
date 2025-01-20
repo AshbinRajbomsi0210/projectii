@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Contact Us {% endblock %}
+{% block css %}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h2>Contact Us</h2>
+    <p class="intro-text">
+        We'd love to hear from you! Whether you have questions about our platform, feedback, or need assistance, feel free to reach out to us using the form below.
+    </p>
+
+    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="row mt-4">
+            <div class="form-group col-md-6">
+                <label for="name"><strong>Name</strong></label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="email"><strong>Email</strong></label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email" required>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="form-group col-md-12">
+                <label for="subject"><strong>Subject</strong></label>
+                <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter Subject" required>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="form-group col-md-12">
+                <label for="message"><strong>Message</strong></label>
+                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write Your Message Here" required></textarea>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="contact-info mt-5">
+        <h4>Other Ways to Reach Us</h4>
+      <p><strong>Email:</strong>  <a href="mailto:rektakhojinfo@gmail.com"> raktakhojinfo@gmail.com</p></a>
+        <p><strong>Phone:</strong> +977-9816647030</p>
+        
+    </div>
+</div>
+{% endblock %}

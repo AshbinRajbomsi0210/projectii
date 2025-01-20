@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Blood Donation {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/home.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1 class="text-center">Search near your area</h1>
+  <h2 class="text-center mb-4">Available Donors According to Blood Group</h2>
+
+  <!-- Search Bar -->
+  <div class="input-group mb-3">
+    <input type="text" id="searchBox" class="form-control" placeholder="Search Blood Group" aria-label="Search Blood Group">
+  </div>
+
+  <!-- Donors List -->
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% if all_group %}
+          {% for i in all_group %}
+          <div class="col">
+            <div class="card mb-4 shadow-sm border-danger">
+              <div class="card-body">
+                <h3 class="card-text font-weight-bold">Blood Group: {{ i.name }}</h3>
+                <h3 class="card-text">Total Donor: {{ i.total }}</h3>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a href="/donors_list/{{ i.id }}/" class="btn btn-sm btn-outline-danger">View All Donors</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-center text-danger">No donors available at the moment.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Search functionality
+  document.getElementById('searchBox').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    document.querySelectorAll('.card').forEach(card => {
+      const bloodGroup = card.querySelector('.card-text').textContent.toLowerCase();
+      card.style.display = bloodGroup.includes(searchTerm) ? '' : 'none';
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} About Us {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static '/css/aboutus.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h2>About Us</h2>
+    <p class="intro-text">
+        Welcome to <strong>RAKTAKHOJ</strong>, a platform dedicated to bridging the gap between blood donors and those in need. Our mission is to create a seamless, person-to-person blood donation network that saves lives and fosters a spirit of compassion and community.
+    </p>
+    
+    <h4>Our Vision</h4>
+    <p>
+        To create a world where every blood donor and recipient can connect directly, ensuring timely help during emergencies. We believe in empowering individuals to make a difference in their communities.
+    </p>
+
+    <h4>Our Mission</h4>
+    <ul>
+        <li>Encourage voluntary blood donation through a hassle-free registration process.</li>
+        <li>Provide a reliable platform to connect donors with recipients in need.</li>
+        <li>Raise awareness about the importance of blood donation and its life-saving impact.</li>
+    </ul>
+
+    <h4>How It Works</h4>
+    <p>
+        Our system enables donors to register with essential details like blood group, location, and contact information. Recipients can search for donors based on their needs and directly reach out to them, ensuring faster and more efficient communication.
+    </p>
+
+    <h4>Why Choose Us?</h4>
+    <p>
+        <ul>
+            <li><strong>Efficiency:</strong> Direct person-to-person communication reduces dependency on intermediaries.</li>
+            <li><strong>Transparency:</strong> Donor and recipient details are securely shared for better trust and reliability.</li>
+            <li><strong>Community Focus:</strong> Our platform fosters a culture of helping and giving back to the society.</li>
+        </ul>
+    </p>
+
+    <h4>Contact Us</h4>
+    <p>If you have any questions or want to learn more about our platform, feel free to <a href="/contact-us">contact us</a>.</p>
+
+    <div class="team-section">
+        <h4>Meet Our Team</h4>
+        <p>Our dedicated team works tirelessly to ensure a smooth and efficient platform for blood donation. Together, we are driven by the shared goal of saving lives.</p>
+        <!-- Add team member details if needed -->
+    </div>
+</div>
+{% endblock %}
