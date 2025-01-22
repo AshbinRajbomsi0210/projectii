@@ -156,6 +156,7 @@ body {
         const dateElement = document.getElementById("date")
         const todayDate = new Date()
         dateElement.max = new Date(todayDate.getFullYear() - 18, todayDate.getMonth(), todayDate.getDate()).toISOString().split("T")[0]
+        console.log(dateElement.max)
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

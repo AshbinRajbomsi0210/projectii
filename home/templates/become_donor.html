@@ -97,14 +97,6 @@
         <label><i style="font-weight: bold;">Date Of Birth</i></label>
         <input type="date" class="form-control" id="date" name="date" required>
     </div>
-    <script>
-        // Set the max attribute of the date input to today's date
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('date');
-            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-            dateInput.setAttribute('max', today);
-        });
-    </script>
 </div>
 
 <div class="row mt-1">
