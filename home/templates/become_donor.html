@@ -97,13 +97,11 @@
         <input type="date" class="form-control" id="date" name="date" required>
     </div>
     <script>
-        // Set the max attribute of the date input to today's date
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('date');
-            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-            dateInput.setAttribute('max', today);
-        });
-    </script>
+        const dateElement = document.getElementById("date")
+      const todayDate = new Date()
+      dateElement.max = new Date(todayDate.getFullYear () - 18, todayDate.getMonth(), todayDate.getDate()).toISOString().split("T")[0]
+      console.log(dateElement.max)
+   </script>
 </div>
 
 <div class="row mt-1">

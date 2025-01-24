@@ -6,33 +6,69 @@
 {% endblock %}
 {% block body %}
 <div class="container">
-{% if requests %}
-<h3 class="text-center">All Blood Requests</h3>
-<br>
-<table class="table table-sm table-bordered">
-  <tr class="table-danger">
-    <th>Name</th>
-    <th>Phone</th>
-    <th>Email</th>
-    <th>Blood Group</th>
-    <th>Donation Date</th>
-    <th>City</th>
-    <th>Address</th>
-  </tr>
-  {% for i in requests %}
-    <tr>
-      <td>{{i.name}}</td>
-      <td>{{i.phone}}</td>
-      <td>{{i.email}}</td>
-      <td>{{i.blood_group}}</td>
-      <td>{{i.date}}</td>
-      <td>{{i.city}}</td>
-      <td>{{i.address}}</td>
-    </tr>
-  {% endfor %}
-</table>
-{% else %}
-<h2>No Blood Request Available</h2>
-{% endif %}
+    <h3 class="text-center">All Blood Requests</h3>
+    <br>
+
+    {% if unfulfilled_requests or fulfilled_requests %}
+        {% if unfulfilled_requests %}
+            <h4 class="text-center">Unfulfilled Requests</h4>
+            <table class="table table-sm table-bordered">
+                <tr class="table-danger">
+                    <th>SNo</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Blood Group</th>
+                    <th>Donation Date</th>
+                    <th>City</th>
+                    <th>Address</th>
+                </tr>
+                {% for i in unfulfilled_requests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <!-- This will give you a 1-based index -->
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.phone }}</td>
+                    <td>{{ i.blood_group }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.city }}</td>
+                    <td>{{ i.address }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h4>No Unfulfilled Requests Available</h4>
+        {% endif %}
+
+        <br>
+
+        {% if fulfilled_requests %}
+            <h4 class="text-center">Fulfilled Requests</h4>
+            <table class="table table-sm table-bordered">
+                <tr class="table-success">
+                    <th>SNo</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Blood Group</th>
+                    <th>Donation Date</th>
+                    <th>City</th>
+                    <th>Address</th>
+                </tr>
+                {% for i in fulfilled_requests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <!-- This will give you a 1-based index -->
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.phone }}</td>
+                    <td>{{ i.blood_group }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.city }}</td>
+                    <td>{{ i.address }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h4>No Fulfilled Requests Available</h4>
+        {% endif %}
+    {% else %}
+        <h2>No Blood Requests Available</h2>
+    {% endif %}
 </div>
 {% endblock %}

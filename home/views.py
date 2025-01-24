@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from datetime import date
-
+from django.contrib import messages
 
 def index(request):
     all_group = BloodGroup.objects.annotate(total=Count('donor'))
@@ -36,10 +36,14 @@ def request_blood(request):
 
 def see_all_request(request):
     bloodRequests = RequestBlood.objects.all()
-    for x in bloodRequests:
-        print((x.date))
-            
-    return render(request, "see_all_request.html", {'requests':bloodRequests})
+    #for x in bloodRequests:
+      #  print((x.date))
+    unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False)
+    fulfilled_requests = RequestBlood.objects.filter(is_fulfilled=True)       
+    return render(request, "see_all_request.html", {
+        # 'requests':bloodRequests
+        'unfulfilled_requests': unfulfilled_requests,
+        'fulfilled_requests': fulfilled_requests})
 
 def become_donor(request):
     if request.method=="POST":   

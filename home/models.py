@@ -15,6 +15,7 @@ class RequestBlood(models.Model):
     address = models.CharField(max_length=500, blank=True)
     blood_group = models.ForeignKey(BloodGroup, on_delete=models.CASCADE)
     date = models.DateField(max_length=100, blank=True)
+    is_fulfilled = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
