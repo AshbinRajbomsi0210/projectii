@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %} Blood Donation {% endblock %}
 {% block css %}
-<link rel="stylesheet" href="{% static '/css/requestlist.css' %}">
+{% comment %} <link rel="stylesheet" href="{% static '/css/requestlist.css' %}"> {% endcomment %}
 {% endblock %}
 {% block body %}
 <div class="container">
@@ -16,7 +16,8 @@
     <th>Email</th>
     <th>Blood Group</th>
     <th>Donation Date</th>
-    <th>State | City</th>
+    <th>City</th>
+    <th>Address</th>
   </tr>
   {% for i in requests %}
     <tr>
@@ -25,7 +26,8 @@
       <td>{{i.email}}</td>
       <td>{{i.blood_group}}</td>
       <td>{{i.date}}</td>
-      <td>{{i.state}} | {{i.city}}</td>
+      <td>{{i.city}}</td>
+      <td>{{i.address}}</td>
     </tr>
   {% endfor %}
 </table>

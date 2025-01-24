@@ -3,7 +3,7 @@
 /* General Body Styling */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa; /* Light gray background */
+    background-color: #faf8f8; /* Light gray background */
     margin: 0;
     padding: 0;
 }
@@ -19,6 +19,7 @@ body {
     border-radius: 5px;
     margin-right: 15px; /* Space between logo and links */
 }
+
 
 .navbar-nav .nav-item .nav-link {
     color: white; /* White text color */

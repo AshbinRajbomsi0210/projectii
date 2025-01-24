@@ -4,6 +4,8 @@ from . models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from datetime import date
+
 
 def index(request):
     all_group = BloodGroup.objects.annotate(total=Count('donor'))
@@ -11,7 +13,7 @@ def index(request):
 
 def donors_list(request, myid):
     blood_groups = BloodGroup.objects.filter(id=myid).first()
-    donor = Donor.objects.filter(blood_group=blood_groups)
+    donor = Donor.objects.filter(blood_group=blood_groups).order_by("date_of_birth")
     return render(request, "donors_list.html", {'donor':donor})
 
 def donors_details(request, myid):
@@ -21,21 +23,23 @@ def donors_details(request, myid):
 def request_blood(request):
     if request.method == "POST":
         name = request.POST['name']
-        email = request.POST['email']
         phone = request.POST['phone']
-        state = request.POST['state']
-        city = request.POST['city']
+        state = request.POST['state'].capitalize()
+        city = request.POST['city'].capitalize()
         address = request.POST['address']
         blood_group = request.POST['blood_group']
         date = request.POST['date']
-        blood_requests = RequestBlood.objects.create(name=name, email=email, phone=phone, state=state, city=city, address=address, blood_group=BloodGroup.objects.get(name=blood_group), date=date)
+        blood_requests = RequestBlood.objects.create(name=name, phone=phone, state=state, city=city, address=address, blood_group=BloodGroup.objects.get(name=blood_group), date=date)
         blood_requests.save()
         return render(request, "index.html")
     return render(request, "request_blood.html")
 
 def see_all_request(request):
-    requests = RequestBlood.objects.all()
-    return render(request, "see_all_request.html", {'requests':requests})
+    bloodRequests = RequestBlood.objects.all()
+    for x in bloodRequests:
+        print((x.date))
+            
+    return render(request, "see_all_request.html", {'requests':bloodRequests})
 
 def become_donor(request):
     if request.method=="POST":   
@@ -77,7 +81,7 @@ def Login(request):
 
             if user is not None:
                 login(request, user)
-                return redirect("/profile")
+                return redirect("/")
             else:
                 thank = True
                 return render(request, "user_login.html", {"thank":thank})

@@ -1,106 +1,104 @@
-/* main.css */
+/* request.css */
 
-/* General body styling */
+/* General Styles */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa; /* Light gray background */
+    color: #333; /* Darker text for readability */
     margin: 0;
     padding: 0;
 }
 
-/* Container styling */
+/* Container Styling */
 .container {
-    margin-top: 50px;
-    background-color: #ffffff; /* White background */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    padding: 30px;
+    background: white;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for a card-like effect */
     max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto; /* Center the container */
 }
 
-/* Header styling */
-h3 {
-    text-align: center;
+/* Heading Styling */
+.container h3 {
+    color: #dc3545; /* Red color matching the theme */
     font-size: 1.8rem;
-    color: #dc3545; /* Red color for title */
     margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-/* Labels styling */
-label {
+/* Form Labels */
+form label {
     font-size: 1rem;
     font-weight: bold;
-    color: #333;
+    color: #555; /* Subtle gray for labels */
 }
 
-/* Input fields and textarea */
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="date"],
-textarea,
-select {
-    border: 1px solid #ced4da; /* Light border */
-    border-radius: 5px;
+/* Form Inputs */
+form input[type="text"],
+form input[type="tel"],
+form input[type="date"],
+form textarea,
+form select {
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 4px;
     padding: 10px;
-    width: 100%;
     font-size: 1rem;
-    color: #495057; /* Text color */
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease; /* Smooth focus effect */
 }
 
-textarea {
-    resize: none;
-}
-
-/* Focus state for inputs */
-input:focus,
-textarea:focus,
-select:focus {
+/* Input Focus Effect */
+form input:focus,
+form textarea:focus,
+form select:focus {
     outline: none;
     border-color: #dc3545; /* Red border on focus */
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); /* Subtle red glow */
 }
 
-/* Submit button */
-button[type="submit"] {
-    background-color: #dc3545; /* Red background */
-    border: none;
+/* Form Textarea */
+form textarea {
+    resize: none; /* Disable resizing */
+}
+
+/* Form Buttons */
+form button {
+    background-color: #dc3545; /* Red background for the button */
     color: white;
+    border: none;
     padding: 10px 20px;
-    border-radius: 5px;
     font-size: 1rem;
     font-weight: bold;
-    cursor: pointer;
+    border-radius: 4px;
     transition: background-color 0.3s ease;
-    width: 100%; /* Full width for mobile */
 }
 
-button[type="submit"]:hover {
+form button:hover {
     background-color: #c82333; /* Darker red on hover */
+    cursor: pointer;
 }
 
-/* Row spacing */
+/* Row Styling */
 .row {
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Add space between rows */
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: 20px;
+        padding: 20px 15px;
     }
 
-    h3 {
-        font-size: 1.5rem;
-    }
-
-    label {
+    form label {
         font-size: 0.9rem;
     }
 
-    button[type="submit"] {
-        font-size: 0.9rem;
+    form button {
+        width: 100%;
+        padding: 10px;
     }
 }
