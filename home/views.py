@@ -1,25 +1,33 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from . models import *
+from .models import *
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from datetime import date
 from django.contrib import messages
 
+# Check if user is admin
+def is_admin(user):
+    return user.is_staff  # Check if user has admin (staff) privileges
+
+# Home page
 def index(request):
     all_group = BloodGroup.objects.annotate(total=Count('donor'))
-    return render(request, "index.html", {'all_group':all_group})
+    return render(request, "index.html", {'all_group': all_group})
 
+# Donor list page
 def donors_list(request, myid):
     blood_groups = BloodGroup.objects.filter(id=myid).first()
     donor = Donor.objects.filter(blood_group=blood_groups).order_by("date_of_birth")
-    return render(request, "donors_list.html", {'donor':donor})
+    return render(request, "donors_list.html", {'donor': donor})
 
+# Donor details page
 def donors_details(request, myid):
     details = Donor.objects.filter(id=myid)[0]
-    return render(request, "donors_details.html", {'details':details})
+    return render(request, "donors_details.html", {'details': details})
 
+# Request blood page
 def request_blood(request):
     if request.method == "POST":
         name = request.POST['name']
@@ -29,24 +37,31 @@ def request_blood(request):
         address = request.POST['address']
         blood_group = request.POST['blood_group']
         date = request.POST['date']
-        blood_requests = RequestBlood.objects.create(name=name, phone=phone, state=state, city=city, address=address, blood_group=BloodGroup.objects.get(name=blood_group), date=date)
+        blood_requests = RequestBlood.objects.create(
+            name=name,
+            phone=phone,
+            state=state,
+            city=city,
+            address=address,
+            blood_group=BloodGroup.objects.get(name=blood_group),
+            date=date,
+        )
         blood_requests.save()
         return render(request, "index.html")
     return render(request, "request_blood.html")
 
+# See all blood requests
 def see_all_request(request):
-    bloodRequests = RequestBlood.objects.all()
-    #for x in bloodRequests:
-      #  print((x.date))
     unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False)
-    fulfilled_requests = RequestBlood.objects.filter(is_fulfilled=True)       
+    fulfilled_requests = RequestBlood.objects.filter(is_fulfilled=True)
     return render(request, "see_all_request.html", {
-        # 'requests':bloodRequests
         'unfulfilled_requests': unfulfilled_requests,
-        'fulfilled_requests': fulfilled_requests})
+        'fulfilled_requests': fulfilled_requests,
+    })
 
+# Become a donor page
 def become_donor(request):
-    if request.method=="POST":   
+    if request.method == "POST":   
         username = request.POST['username']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -59,7 +74,6 @@ def become_donor(request):
         blood_group = request.POST['blood_group']
         date = request.POST['date']
         image = request.FILES['image']
-        report = request.FILES['image']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
@@ -67,13 +81,42 @@ def become_donor(request):
             messages.error(request, "Passwords do not match.")
             return redirect('/signup')
 
-        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
-        donors = Donor.objects.create(donor=user, phone=phone, state=state, city=city, address=address, gender=gender, blood_group=BloodGroup.objects.get(name=blood_group), date_of_birth=date, image=image)
-        user.save()
-        donors.save()
-        return render(request, "index.html")
-    return render(request, "become_donor.html")
+        # Create the user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            password=password
+        )
 
+        # Create the donor, with is_approved=False
+        Donor.objects.create(
+            donor=user,
+            phone=phone,
+            state=state,
+            city=city,
+            address=address,
+            gender=gender,
+            blood_group=BloodGroup.objects.get(name=blood_group),
+            date_of_birth=date,
+            image=image,
+            is_approved=False  # Donor approval is False by default
+        )
+
+        messages.success(request, "Registration successful! Please wait for admin approval.")
+        return redirect('/login')
+    return render(request, "become_donor.html")
+def approved_donor_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        donor = Donor.objects.get(donor=request.user)
+        if not donor.is_approved:
+            messages.error(request, "Your account is awaiting approval. Please wait for the admin to approve your account.")
+            return redirect('/profile')  # Redirect to the profile or another relevant page
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+# Login page
 def Login(request):
     if request.user.is_authenticated:
         return redirect("/")
@@ -88,19 +131,22 @@ def Login(request):
                 return redirect("/")
             else:
                 thank = True
-                return render(request, "user_login.html", {"thank":thank})
+                return render(request, "user_login.html", {"thank": thank})
     return render(request, "login.html")
 
+# Logout
 def Logout(request):
     logout(request)
     return redirect('/')
 
-@login_required(login_url = '/login')
+# User profile page
+@login_required(login_url='/login')
 def profile(request):
     donor_profile = Donor.objects.get(donor=request.user)
-    return render(request, "profile.html", {'donor_profile':donor_profile})
+    return render(request, "profile.html", {'donor_profile': donor_profile})
 
-@login_required(login_url = '/login')
+# Edit profile page
+@login_required(login_url='/login')
 def edit_profile(request):
     donor_profile = Donor.objects.get(donor=request.user)
     if request.method == "POST":
@@ -125,24 +171,114 @@ def edit_profile(request):
         except:
             pass
         alert = True
-        return render(request, "edit_profile.html", {'alert':alert})
-    return render(request, "edit_profile.html", {'donor_profile':donor_profile})
+        return render(request, "edit_profile.html", {'alert': alert})
+    return render(request, "edit_profile.html", {'donor_profile': donor_profile})
 
-@login_required(login_url = '/login')
+# Change donation status
+@login_required(login_url='/login')
 def change_status(request):
     donor_profile = Donor.objects.get(donor=request.user)
-    if donor_profile.ready_to_donate:
-        donor_profile.ready_to_donate = False
-        donor_profile.save()
-    else:
-        donor_profile.ready_to_donate = True
-        donor_profile.save()
+    donor_profile.ready_to_donate = not donor_profile.ready_to_donate
+    donor_profile.save()
     return redirect('/profile')
+
+# About Us page
 def about_us(request):
     return render(request, 'about_us.html')
 
+# Contact Us page
 def contact_us(request):
     return render(request, 'contact_us.html')
 
+# Campaigns page
 def campaigns(request):
     return render(request, 'campaigns.html')
+
+# Admin Panel Views
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    total_donors = Donor.objects.count()
+    total_requests = RequestBlood.objects.count()
+    unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False).count()
+    context = {
+        'total_donors': total_donors,
+        'total_requests': total_requests,
+        'unfulfilled_requests': unfulfilled_requests,
+    }
+    return render(request, 'admin_panel/dashboard.html', context)
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def manage_donors(request):
+    donors = Donor.objects.all()
+    return render(request, 'admin_panel/manage_donors.html', {'donors': donors})
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def manage_requests(request):
+    requests = RequestBlood.objects.all()
+    return render(request, 'admin_panel/manage_requests.html', {'requests': requests})
+
+@login_required
+@user_passes_test(is_admin)
+def approve_donor(request, donor_id):
+    donor = Donor.objects.get(id=donor_id)
+    donor.is_approved = True
+    donor.save()
+    messages.success(request, f"{donor.donor.username} has been approved successfully.")
+    return redirect('admin_dashboard')
+
+@login_required
+@user_passes_test(is_admin)
+def delete_donor(request, donor_id):
+    donor = Donor.objects.get(id=donor_id)
+    donor.delete()
+    messages.success(request, f"{donor.donor.username} has been deleted successfully.")
+    return redirect('admin_dashboard')
+@login_required
+@user_passes_test(is_admin)
+def fulfill_request(request, request_id):
+    blood_request = RequestBlood.objects.get(id=request_id)
+    blood_request.is_fulfilled = True
+    blood_request.save()
+    messages.success(request, f"Request from {blood_request.name} has been marked as fulfilled.")
+    return redirect('admin_dashboard')
+
+@login_required
+@user_passes_test(is_admin)
+def delete_request(request, request_id):
+    blood_request = RequestBlood.objects.get(id=request_id)
+    blood_request.delete()
+    messages.success(request, f"Request from {blood_request.name} has been deleted.")
+    return redirect('admin_dashboard')
+@login_required
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    total_donors = Donor.objects.count()
+    total_requests = RequestBlood.objects.count()
+    unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False).count()
+
+    # Search functionality for donors
+    donor_search_query = request.GET.get('donor_search', '')
+    if donor_search_query:
+        donors = Donor.objects.filter(donor__username__icontains=donor_search_query)
+    else:
+        donors = Donor.objects.all()
+
+    # Search functionality for requests
+    request_search_query = request.GET.get('request_search', '')
+    if request_search_query:
+        requests = RequestBlood.objects.filter(name__icontains=request_search_query)
+    else:
+        requests = RequestBlood.objects.all()
+
+    context = {
+        'total_donors': total_donors,
+        'total_requests': total_requests,
+        'unfulfilled_requests': unfulfilled_requests,
+        'donors': donors,
+        'requests': requests,
+    }
+
+    return render(request, 'admin_panel/dashboard.html', context)

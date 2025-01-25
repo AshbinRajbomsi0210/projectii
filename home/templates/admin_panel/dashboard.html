@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <!-- Display Alerts for Actions -->
+        {% if messages %}
+            <div class="alert alert-info">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Donor Management Section -->
+        <section>
+            <h2>Donor Management</h2>
+            <!-- Donor List -->
+            <ul>
+                {% for donor in donors %}
+                    <li>
+                        {{ donor.donor.username }}
+                        {% if not donor.is_approved %}
+                            <a href="{% url 'approve_donor' donor.id %}" class="btn btn-approve">Approve</a>
+                        {% else %}
+                            <span class="approved-status">Approved</span>
+                        {% endif %}
+                        <a href="{% url 'delete_donor' donor.id %}" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this donor?')">Delete</a>
+                    </li>
+                {% empty %}
+                    <li>No donors found.</li>
+                {% endfor %}
+            </ul>
+
+            <!-- Search Donors -->
+            <div class="search-container">
+                <form method="GET" action="{% url 'admin_dashboard' %}">
+                    <input type="text" name="donor_search" placeholder="Search Donors" value="{{ request.GET.donor_search }}">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Blood Requests Section -->
+        <section>
+            <h2>Request Management</h2>
+            <!-- Request List -->
+            <ul>
+                {% for req in requests %}
+                    <li>
+                        {{ req.name }} ({{ req.blood_group }})
+                        {% if not req.is_fulfilled %}
+                            <a href="{% url 'fulfill_request' req.id %}" class="btn btn-fulfill">Mark Fulfilled</a>
+                        {% else %}
+                            <span class="fulfilled-status">Fulfilled</span>
+                        {% endif %}
+                        <a href="{% url 'delete_request' req.id %}" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this request?')">Delete</a>
+                    </li>
+                {% empty %}
+                    <li>No requests found.</li>
+                {% endfor %}
+            </ul>
+
+            <!-- Search Requests -->
+            <div class="search-container">
+                <form method="GET" action="{% url 'admin_dashboard' %}">
+                    <input type="text" name="request_search" placeholder="Search Requests" value="{{ request.GET.request_search }}">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Blood Group Statistics Section -->
+        <section>
+            <h2>Blood Group Statistics</h2>
+            <ul>
+                {% for group in blood_groups %}
+                    <li>{{ group.name }}: {{ group.donors.count }}</li>
+                {% empty %}
+                    <li>No statistics available.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

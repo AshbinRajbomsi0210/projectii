@@ -13,6 +13,9 @@ body {
     background-color: #dc3545; /* Red background for navbar */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar img {

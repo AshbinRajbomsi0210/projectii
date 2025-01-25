@@ -1,119 +1,107 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %} Blood Donation {% endblock %}
-{% block css %}
-{% endblock %}
-{% block body %}
 
+{% block body %}
 <div class="container">
     <div class="row">
+        <!-- Profile Image and Donation Status -->
         <div class="col-md-4">
-            <div>
-                <img src="{{donor_profile.image.url}}" alt="" width="310px" height="270px">
-                <br><br><br>
+            <div class="text-center">
+                {% if donor_profile.image %}
+                <img src="{{donor_profile.image.url}}" alt="Profile Image" class="img-fluid" style="max-width: 310px; max-height: 270px;">
+                {% else %}
+                <img src="{% static 'default-profile.png' %}" alt="Profile Image" class="img-fluid" style="max-width: 310px; max-height: 270px;">
+                {% endif %}
+                <br><br>
                 {% if donor_profile.ready_to_donate %}
-                <a href="/change_status/" class="btn btn-success" style="width: 15rem; font-size: 23px;">I'm Ready To Donate</a>
-              {% else %}
-                <a href="/change_status/" class="btn btn-danger" style="width: 15rem; font-size: 19px;">I'm Not Ready To Donate</a>
-              {% endif %}
+                <a href="/change_status/" class="btn btn-success" style="width: 15rem; font-size: 20px;">I'm Ready To Donate</a>
+                {% else %}
+                <a href="/change_status/" class="btn btn-danger" style="width: 15rem; font-size: 20px;">I'm Not Ready To Donate</a>
+                {% endif %}
             </div>
         </div>
+
+        <!-- Profile Information -->
         <div class="col-md-8">
-            <div>
-                <div>
-                    <br>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Username:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{user}}</h3>
-                        </div>
+            <div class="profile-info">
+                <h2>{{ donor_profile.donor.username }}'s Profile</h2>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <h5>Full Name:</h5>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Full Name:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{user.get_full_name}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Email:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{user.email}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Phone Number:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.phone}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Gender</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.gender}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Date of Birth:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.date_of_birth}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>State:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.state}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>City:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.city}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Address:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.address}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Blood Group:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.blood_group}}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <h3>Address:</h3>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>{{donor_profile.address}}</h3>
-                        </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.donor.get_full_name }}</p>
                     </div>
                 </div>
-                <a href="/edit_profile/" class="btn btn-outline-danger mt-4">Edit Profile</a>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>Email:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.donor.email }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>Phone Number:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.phone }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>Gender:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.gender }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>Date of Birth:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.date_of_birth }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>State:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.state }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>City:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.city }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>Address:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.address }}</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <h5>Blood Group:</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ donor_profile.blood_group }}</p>
+                    </div>
+                </div>
+                <br>
+                <a href="/edit_profile/" class="btn btn-outline-danger">Edit Profile</a>
             </div>
         </div>
-</div>
+    </div>
 </div>
 {% endblock %}
