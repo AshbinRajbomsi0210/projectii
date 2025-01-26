@@ -32,6 +32,7 @@ class Donor(models.Model):
     image = models.ImageField(upload_to="")
     report = models.ImageField(upload_to="")
     ready_to_donate = models.BooleanField(default=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.blood_group)

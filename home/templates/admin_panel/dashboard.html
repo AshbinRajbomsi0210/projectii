@@ -30,6 +30,13 @@
         <!-- Donor Management Section -->
         <section>
             <h2>Donor Management</h2>
+            <!-- Search Donors -->
+            <div class="search-container">
+                <form method="GET" action="{% url 'admin_dashboard' %}">
+                    <input type="text" name="donor_search" placeholder="Search Donors" value="{{ request.GET.donor_search }}">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
             <!-- Donor List -->
             <ul>
                 {% for donor in donors %}
@@ -47,18 +54,18 @@
                 {% endfor %}
             </ul>
 
-            <!-- Search Donors -->
-            <div class="search-container">
-                <form method="GET" action="{% url 'admin_dashboard' %}">
-                    <input type="text" name="donor_search" placeholder="Search Donors" value="{{ request.GET.donor_search }}">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
         </section>
 
         <!-- Blood Requests Section -->
         <section>
             <h2>Request Management</h2>
+            <!-- Search Requests -->
+            <div class="search-container">
+                <form method="GET" action="{% url 'admin_dashboard' %}">
+                    <input type="text" name="request_search" placeholder="Search Requests" value="{{ request.GET.request_search }}">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
             <!-- Request List -->
             <ul>
                 {% for req in requests %}
@@ -76,13 +83,6 @@
                 {% endfor %}
             </ul>
 
-            <!-- Search Requests -->
-            <div class="search-container">
-                <form method="GET" action="{% url 'admin_dashboard' %}">
-                    <input type="text" name="request_search" placeholder="Search Requests" value="{{ request.GET.request_search }}">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
         </section>
 
         <!-- Blood Group Statistics Section -->

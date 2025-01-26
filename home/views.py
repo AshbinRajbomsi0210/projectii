@@ -19,7 +19,7 @@ def index(request):
 # Donor list page
 def donors_list(request, myid):
     blood_groups = BloodGroup.objects.filter(id=myid).first()
-    donor = Donor.objects.filter(blood_group=blood_groups).order_by("date_of_birth")
+    donor = Donor.objects.filter(blood_group=blood_groups, is_approved=True).order_by("date_of_birth")
     return render(request, "donors_list.html", {'donor': donor})
 
 # Donor details page
