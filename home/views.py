@@ -37,6 +37,8 @@ def request_blood(request):
         address = request.POST['address']
         blood_group = request.POST['blood_group']
         date = request.POST['date']
+        
+        # Save the request to the database
         blood_requests = RequestBlood.objects.create(
             name=name,
             phone=phone,
@@ -47,13 +49,18 @@ def request_blood(request):
             date=date,
         )
         blood_requests.save()
-        return render(request, "index.html")
-    return render(request, "request_blood.html")
 
+        # Add a success message
+        messages.success(request, "Your blood request has been submitted successfully!")
+
+        # Redirect to prevent form resubmission
+        return redirect("request_blood")  # Replace "index" with your desired view name or URL pattern
+
+    return render(request, "request_blood.html")
 # See all blood requests
 def see_all_request(request):
-    unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False)
-    fulfilled_requests = RequestBlood.objects.filter(is_fulfilled=True)
+    unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False).order_by('date')
+    fulfilled_requests = RequestBlood.objects.filter(is_fulfilled=True).order_by('date')
     return render(request, "see_all_request.html", {
         'unfulfilled_requests': unfulfilled_requests,
         'fulfilled_requests': fulfilled_requests,
@@ -74,6 +81,7 @@ def become_donor(request):
         blood_group = request.POST['blood_group']
         date = request.POST['date']
         image = request.FILES['image']
+        report =request.FILES['report']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 

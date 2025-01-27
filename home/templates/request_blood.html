@@ -8,6 +8,18 @@
 
 {% block body %}
 <div class="container">
+    <!-- Render Messages -->
+    {% if messages %}
+        <div class="messages mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
     <h3><i style="font-weight: bold;">Request For Blood</i></h3>
     <form method="POST"> {% csrf_token %}
         <div class="row mt-4">
@@ -18,7 +30,6 @@
         </div>
 
         <div class="row mt-1">
-            
             <div class="form-group col-md-6">
                 <label><i style="font-weight: bold;">Contact Number</i></label>
                 <input type="tel" class="form-control" name="phone" id="phone" placeholder="Enter Contact Number" required>
@@ -61,6 +72,15 @@
                 <label><i style="font-weight: bold;">Date Of Request</i></label>
                 <input type="date" class="form-control" id="date" name="date" required>
             </div>
+            <script>
+                const today = new Date().toISOString().split('T')[0];
+                const maxDate = new Date();
+                maxDate.setDate(maxDate.getDate() + 15);
+                const maxDateFormatted = maxDate.toISOString().split('T')[0];
+                const date = document.getElementById('date');
+                date.setAttribute('min', today);
+                date.setAttribute('max', maxDateFormatted);
+              </script>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
