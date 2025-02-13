@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from datetime import date
 from django.contrib import messages
+from django.db.models import Q
+from .models import RequestBlood 
+
 
 # Check if user is admin
 def is_admin(user):
@@ -88,6 +91,7 @@ def become_donor(request):
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return redirect('/signup')
+            
 
         # Create the user
         user = User.objects.create_user(
@@ -97,7 +101,6 @@ def become_donor(request):
             last_name=last_name,
             password=password
         )
-
         # Create the donor, with is_approved=False
         Donor.objects.create(
             donor=user,
@@ -111,6 +114,10 @@ def become_donor(request):
             image=image,
             is_approved=False  # Donor approval is False by default
         )
+         # Check if the user is blocked
+        if Donor.is_blocked:
+            messages.error(request, "You are blocked from becoming a donor. Please contact the admin for assistance.")
+            return redirect('/')
 
         messages.success(request, "Registration successful! Please wait for admin approval.")
         return redirect('/login')
@@ -203,69 +210,14 @@ def campaigns(request):
     return render(request, 'campaigns.html')
 
 # Admin Panel Views
+
 @login_required(login_url='/login')
 @user_passes_test(is_admin)
 def admin_dashboard(request):
     total_donors = Donor.objects.count()
     total_requests = RequestBlood.objects.count()
     unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False).count()
-    context = {
-        'total_donors': total_donors,
-        'total_requests': total_requests,
-        'unfulfilled_requests': unfulfilled_requests,
-    }
-    return render(request, 'admin_panel/dashboard.html', context)
-
-@login_required(login_url='/login')
-@user_passes_test(is_admin)
-def manage_donors(request):
-    donors = Donor.objects.all()
-    return render(request, 'admin_panel/manage_donors.html', {'donors': donors})
-
-@login_required(login_url='/login')
-@user_passes_test(is_admin)
-def manage_requests(request):
-    requests = RequestBlood.objects.all()
-    return render(request, 'admin_panel/manage_requests.html', {'requests': requests})
-
-@login_required
-@user_passes_test(is_admin)
-def approve_donor(request, donor_id):
-    donor = Donor.objects.get(id=donor_id)
-    donor.is_approved = True
-    donor.save()
-    messages.success(request, f"{donor.donor.username} has been approved successfully.")
-    return redirect('admin_dashboard')
-
-@login_required
-@user_passes_test(is_admin)
-def delete_donor(request, donor_id):
-    donor = Donor.objects.get(id=donor_id)
-    donor.delete()
-    messages.success(request, f"{donor.donor.username} has been deleted successfully.")
-    return redirect('admin_dashboard')
-@login_required
-@user_passes_test(is_admin)
-def fulfill_request(request, request_id):
-    blood_request = RequestBlood.objects.get(id=request_id)
-    blood_request.is_fulfilled = True
-    blood_request.save()
-    messages.success(request, f"Request from {blood_request.name} has been marked as fulfilled.")
-    return redirect('admin_dashboard')
-
-@login_required
-@user_passes_test(is_admin)
-def delete_request(request, request_id):
-    blood_request = RequestBlood.objects.get(id=request_id)
-    blood_request.delete()
-    messages.success(request, f"Request from {blood_request.name} has been deleted.")
-    return redirect('admin_dashboard')
-@login_required
-@user_passes_test(is_admin)
-def admin_dashboard(request):
-    total_donors = Donor.objects.count()
-    total_requests = RequestBlood.objects.count()
-    unfulfilled_requests = RequestBlood.objects.filter(is_fulfilled=False).count()
+    fulfilled_requests = RequestBlood.objects.filter(is_fulfilled=True).count()
 
     # Search functionality for donors
     donor_search_query = request.GET.get('donor_search', '')
@@ -277,16 +229,81 @@ def admin_dashboard(request):
     # Search functionality for requests
     request_search_query = request.GET.get('request_search', '')
     if request_search_query:
-        requests = RequestBlood.objects.filter(name__icontains=request_search_query)
+        filtered_requests = RequestBlood.objects.filter(name__icontains=request_search_query)
     else:
-        requests = RequestBlood.objects.all()
+        filtered_requests = RequestBlood.objects.all()
 
     context = {
         'total_donors': total_donors,
         'total_requests': total_requests,
         'unfulfilled_requests': unfulfilled_requests,
+        'fulfilled_requests': fulfilled_requests,
         'donors': donors,
-        'requests': requests,
+        'requests': filtered_requests,
     }
 
     return render(request, 'admin_panel/dashboard.html', context)
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def manage_donors(request):
+    donors = Donor.objects.all()
+    return render(request, 'admin_panel/dashboard.html', {'donors': donors})
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def manage_requests(request):
+    requests = RequestBlood.objects.all()
+    return render(request, 'admin_panel/dashboard.html', {'requests': requests})
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def approve_donor(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donor.is_approved = True
+    donor.save()
+    messages.success(request, f"{donor.donor.username} has been approved successfully.")
+    return redirect('manage_donors')
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def delete_donor(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donor.delete()
+    messages.success(request, f"{donor.donor.username} has been deleted successfully.")
+    return redirect('manage_donors')
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def fulfill_request(request, request_id):
+    blood_request = get_object_or_404(RequestBlood, id=request_id)
+    blood_request.is_fulfilled = not blood_request.is_fulfilled
+    blood_request.save()
+    messages.success(request, f"Request from {blood_request.name} has been marked as fulfilled.")
+    return redirect('manage_requests')
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def delete_request(request, request_id):
+    blood_request = get_object_or_404(RequestBlood, id=request_id)
+    blood_request.delete()
+    messages.success(request, f"Request from {blood_request.name} has been deleted.")
+    return redirect('manage_requests')
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def block_donor(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donor.donor.is_active = False  # Set the user account to inactive
+    donor.donor.save()
+    messages.success(request, f"Donor {donor.donor.username} has been blocked.")
+    return redirect('manage_donors')
+
+@login_required(login_url='/login')
+@user_passes_test(is_admin)
+def unblock_donor(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donor.donor.is_active = True  # Set the user account to active
+    donor.donor.save()
+    messages.success(request, f"Donor {donor.donor.username} has been unblocked.")
+    return redirect('manage_donors')

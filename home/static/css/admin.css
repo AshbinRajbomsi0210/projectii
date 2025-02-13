@@ -75,7 +75,7 @@ ul li {
 }
 
 .btn-fulfill {
-    background-color: #ffc107;
+    background-color:  #28a745;
     color: black;
 }
 
@@ -98,4 +98,59 @@ form button {
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+}
+.status-active {
+    color: green;
+    font-weight: bold;
+}
+.status-blocked {
+    color: red;
+    font-weight: bold;
+}
+.status-approved {
+    color: blue;
+    font-weight: bold;
+}
+.btn {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-danger {
+    background-color: red;
+    color: white;
+}
+.btn-success {
+    background-color: green;
+    color: white;
+}
+.btn-primary {
+    background-color: blue;
+    color: white;
+}
+.btn-delete {
+    background-color: gray;
+    color: white;
+}
+.unfulfilled {
+    background-color: #f8d7da; /* Light red background */
+    border-left: 5px solid #f5c2c7;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.fulfilled-status {
+    color: green;
+    font-weight: bold;
+}
+.btn-fulfill{
+    color: red;
+    font-weight: bold;
+
+}
+.btn-unfulfill{
+
 }
