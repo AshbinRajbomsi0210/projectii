@@ -8,6 +8,8 @@ from datetime import date
 from django.contrib import messages
 from django.db.models import Q
 from .models import RequestBlood 
+from .models import BloodBank
+
 
 
 # Check if user is admin
@@ -73,6 +75,9 @@ def see_all_request(request):
 def become_donor(request):
     if request.method == "POST":   
         username = request.POST['username']
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken. Please choose another one.")
+            return redirect("become_donor")  # Redirect back to the form
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
@@ -112,25 +117,13 @@ def become_donor(request):
             blood_group=BloodGroup.objects.get(name=blood_group),
             date_of_birth=date,
             image=image,
-            is_approved=False  # Donor approval is False by default
+            report=report,
+            # is_approved=False  # Donor approval is False by default
         )
-         # Check if the user is blocked
-        if Donor.is_blocked:
-            messages.error(request, "You are blocked from becoming a donor. Please contact the admin for assistance.")
-            return redirect('/')
-
-        messages.success(request, "Registration successful! Please wait for admin approval.")
+        user.save()
+        messages.success(request, "Donor Registration successful!")
         return redirect('/login')
     return render(request, "become_donor.html")
-def approved_donor_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        donor = Donor.objects.get(donor=request.user)
-        if not donor.is_approved:
-            messages.error(request, "Your account is awaiting approval. Please wait for the admin to approve your account.")
-            return redirect('/profile')  # Redirect to the profile or another relevant page
-        return view_func(request, *args, **kwargs)
-    return wrapper
-
 # Login page
 def Login(request):
     if request.user.is_authenticated:
@@ -151,6 +144,7 @@ def Login(request):
 
 # Logout
 def Logout(request):
+    messages.success(request, "You have successfully logged out.")
     logout(request)
     return redirect('/')
 
@@ -183,6 +177,10 @@ def edit_profile(request):
             image = request.FILES['image']
             donor_profile.image = image
             donor_profile.save()
+            report = request.FILES['report']
+            donor_profile.report = report
+            donor_profile.save()
+
         except:
             pass
         alert = True
@@ -207,7 +205,7 @@ def contact_us(request):
 
 # Campaigns page
 def campaigns(request):
-    return render(request, 'campaigns.html')
+    return render(request, 'blood_banks.html')
 
 # Admin Panel Views
 
@@ -256,14 +254,7 @@ def manage_requests(request):
     requests = RequestBlood.objects.all()
     return render(request, 'admin_panel/dashboard.html', {'requests': requests})
 
-@login_required(login_url='/login')
-@user_passes_test(is_admin)
-def approve_donor(request, donor_id):
-    donor = get_object_or_404(Donor, id=donor_id)
-    donor.is_approved = True
-    donor.save()
-    messages.success(request, f"{donor.donor.username} has been approved successfully.")
-    return redirect('manage_donors')
+
 
 @login_required(login_url='/login')
 @user_passes_test(is_admin)
@@ -290,20 +281,6 @@ def delete_request(request, request_id):
     messages.success(request, f"Request from {blood_request.name} has been deleted.")
     return redirect('manage_requests')
 
-@login_required(login_url='/login')
-@user_passes_test(is_admin)
-def block_donor(request, donor_id):
-    donor = get_object_or_404(Donor, id=donor_id)
-    donor.donor.is_active = False  # Set the user account to inactive
-    donor.donor.save()
-    messages.success(request, f"Donor {donor.donor.username} has been blocked.")
-    return redirect('manage_donors')
-
-@login_required(login_url='/login')
-@user_passes_test(is_admin)
-def unblock_donor(request, donor_id):
-    donor = get_object_or_404(Donor, id=donor_id)
-    donor.donor.is_active = True  # Set the user account to active
-    donor.donor.save()
-    messages.success(request, f"Donor {donor.donor.username} has been unblocked.")
-    return redirect('manage_donors')
+def blood_banks(request):
+    banks = BloodBank.objects.all()  # Fetch all blood banks from DB
+    return render(request, 'blood_banks.html', {'banks': banks})

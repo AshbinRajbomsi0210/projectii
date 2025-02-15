@@ -1,104 +1,120 @@
-/* request.css */
-
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa; /* Light gray background */
-    color: #333; /* Darker text for readability */
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
 }
 
-/* Container Styling */
 .container {
-    background: white;
-    padding: 30px 20px;
+    width: 80%;
+    margin: 30px auto;
+    background-color: #ffffff;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for a card-like effect */
-    max-width: 800px;
-    margin: 20px auto; /* Center the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Heading Styling */
-.container h3 {
-    color: #dc3545; /* Red color matching the theme */
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+h3 {
     text-align: center;
+    color: #333;
     font-weight: bold;
-    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
-/* Form Labels */
-form label {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #555; /* Subtle gray for labels */
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
 }
 
-/* Form Inputs */
-form input[type="text"],
-form input[type="tel"],
-form input[type="date"],
-form textarea,
-form select {
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 4px;
-    padding: 10px;
+label {
+    font-weight: bold;
+    color: #555;
     font-size: 1rem;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select {
     width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     box-sizing: border-box;
-    transition: all 0.3s ease; /* Smooth focus effect */
-}
-
-/* Input Focus Effect */
-form input:focus,
-form textarea:focus,
-form select:focus {
-    outline: none;
-    border-color: #dc3545; /* Red border on focus */
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); /* Subtle red glow */
-}
-
-/* Form Textarea */
-form textarea {
-    resize: none; /* Disable resizing */
-}
-
-/* Form Buttons */
-form button {
-    background-color: #dc3545; /* Red background for the button */
-    color: white;
-    border: none;
-    padding: 10px 20px;
     font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
 }
 
-form button:hover {
-    background-color: #c82333; /* Darker red on hover */
+textarea {
+    resize: vertical;
+}
+
+input[type="date"] {
+    font-size: 1rem;
+    padding: 8px;
+}
+
+select {
+    font-size: 1rem;
+}
+
+/* Buttons */
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
-/* Row Styling */
-.row {
-    margin-bottom: 15px; /* Add space between rows */
+button[type="submit"]:hover {
+    background-color: #0056b3;
 }
 
-/* Responsive Design */
+/* Alert Styling */
+.messages .alert {
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: white;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.alert .btn-close {
+    color: white;
+}
+
+/* Responsive Layout */
 @media (max-width: 768px) {
     .container {
-        padding: 20px 15px;
+        width: 90%;
     }
 
-    form label {
-        font-size: 0.9rem;
+    .row {
+        flex-direction: column;
     }
 
-    form button {
+    .form-group {
         width: 100%;
-        padding: 10px;
     }
 }

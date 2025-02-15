@@ -1,0 +1,7 @@
+{% for blog in blogs %}
+  <div class="blog-post">
+    <h2>{{ blog.title }}</h2>
+    <p>{{ blog.content }}</p>
+    <p>Published on: {{ blog.published_date }}</p>  <!-- Display published date -->
+  </div>
+{% endfor %}

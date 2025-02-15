@@ -30,10 +30,21 @@ class Donor(models.Model):
     blood_group = models.ForeignKey(BloodGroup, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10)
     image = models.ImageField(upload_to="")
-    report = models.ImageField(upload_to="")
+    report = models.FileField(upload_to="")
     ready_to_donate = models.BooleanField(default=True)
-    is_approved = models.BooleanField(default=False)
-    is_blocked = models.BooleanField(default=False) 
+    # is_approved = models.BooleanField(default=False)
+    # is_blocked = models.BooleanField(default=False) 
 
     def __str__(self):
         return str(self.blood_group)
+    
+class BloodBank(models.Model):
+    name = models.CharField(max_length=200)
+    location = models.CharField(max_length=255)
+    contact = models.CharField(max_length=50)
+    email = models.EmailField()
+    website = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.name
+

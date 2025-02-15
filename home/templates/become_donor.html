@@ -5,6 +5,17 @@
 {% endblock %}
 {% block body %}
 <div class="container">
+    {% if messages %}
+        <div class="messages mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
     <h4>Register As Donor</h4>
     <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
 <div class="row mt-4">
@@ -115,7 +126,14 @@
     </div>
 </div>
 
-<button type="submit" class="btn btn-primary">Submit</button>
+<button type="submit" class="btn btn-primary" onclick="confirmAction(event, 'Are you sure you want to Register as donor?')">Submit</button>
+<script>
+    function confirmAction(event, message) {
+        if (!confirm(message)) {
+            event.preventDefault(); // Prevents the action if the user clicks "Cancel"
+        }
+    }
+</script>
 </form>
 </div>
 {% endblock %}

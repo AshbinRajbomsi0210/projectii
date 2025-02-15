@@ -6,95 +6,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <script>
+        function confirmAction(event, message) {
+            if (!confirm(message)) {
+                event.preventDefault(); // Prevents the action if the user clicks "Cancel"
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
         <h1>Admin Dashboard</h1>
         <nav>
             <a href="{% url 'admin_dashboard' %}">Dashboard</a>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'logout' %}" onclick="confirmAction(event, 'Are you sure you want to log out?')">Logout</a>
         </nav>
     </header>
+
     <main>
-        <!-- Display Alerts for Actions -->
+        <!-- Display Alerts -->
         {% if messages %}
-            <div class="alert alert-info">
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
             </div>
         {% endif %}
 
         <!-- Donor Management Section -->
-        <section>
+        <section class="section-container">
             <h2>Donor Management</h2>
-            <!-- Search Donors -->
-            <div class="search-container">
-                <form method="GET" action="{% url 'admin_dashboard' %}">
-                    <input type="text" name="donor_search" placeholder="Search Donors" value="{{ request.GET.donor_search }}">
-                    <button type="submit">Search</button>
-                </form>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donor Name</th>
+                            <th>Blood Group</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donor in donors %}
+                            <tr>
+                                <td>{{ donor.donor.first_name }} {{ donor.donor.last_name }}</td>
+                                <td>{{ donor.blood_group }}</td>
+                                <td> <a href="{% url 'delete_donor' donor.id %}" class="btn btn-delete" onclick="confirmAction(event, 'Are you sure you want to delete this donor? This action cannot be undone.')">Delete</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No donors found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <!-- Donor List -->
-            <ul>
-                {% for donor in donors %}
-                    <li>
-                        {{ donor.donor.username }} 
-                        {% if donor.donor.is_active %}
-                            <span class="status-active">Active</span>
-                            <a href="{% url 'block_donor' donor.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to block this donor?')">Block</a>
-                        {% else %}
-                            <span class="status-blocked">Blocked</span>
-                            <a href="{% url 'unblock_donor' donor.id %}" class="btn btn-success" onclick="return confirm('Are you sure you want to unblock this donor?')">Unblock</a>
-                        {% endif %}
-
-                        {% if not donor.is_approved %}
-                            <a href="{% url 'approve_donor' donor.id %}" class="btn btn-primary" onclick="return confirm('Are you sure you want to approve this donor?')">Approve</a>
-                        {% else %}
-                            <span class="status-approved">Approved</span>
-                        {% endif %}
-
-                        <a href="{% url 'delete_donor' donor.id %}" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this donor?')">Delete</a>
-                    </li>
-                {% empty %}
-                    <li>No donors found.</li>
-                {% endfor %}
-            </ul>
-
         </section>
 
-        <!-- Blood Requests Section -->
-        <section>
-            <h2>Request Management</h2>
-            <!-- Search Requests -->
-            <div class="search-container">
-                <form method="GET" action="{% url 'admin_dashboard' %}">
-                    <input type="text" name="request_search" placeholder="Search Requests" value="{{ request.GET.request_search }}">
-                    <button type="submit">Search</button>
-                </form>
+        <!-- Blood Request Management Section -->
+        <section class="section-container">
+            <h2>Blood Request Management</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Blood Group</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in requests %}
+                            <tr>
+                                <td>{{ req.name }}</td>
+                                <td>{{ req.blood_group }}</td>
+                                <td class="{% if req.is_fulfilled %}status-fulfilled{% else %}status-pending{% endif %}">
+                                    {% if req.is_fulfilled %}
+                                        Fulfilled
+                                    {% else %}
+                                        Pending
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not req.is_fulfilled %}
+                                        <a href="{% url 'fulfill_request' req.id %}" class="btn btn-fulfill" onclick="confirmAction(event, 'Are you sure you want to mark this request as fulfilled?')">Mark Fulfilled</a>
+                                    {% else %}
+                                        <a href="{% url 'fulfill_request' req.id %}" class="btn btn-unfulfill" onclick="confirmAction(event, 'Are you sure you want to mark this request as unfulfilled?')">Mark Unfulfilled</a>
+                                    {% endif %}
+                                    <a href="{% url 'delete_request' req.id %}" class="btn btn-delete" onclick="confirmAction(event, 'Are you sure you want to delete this request? This action cannot be undone.')">Delete</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No requests found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <!-- Request List -->
-            <ul>
-                {% for req in requests %}
-                    <li>
-                        {{ req.name }} ({{ req.blood_group }})
-                        {% if not req.is_fulfilled %}
-                            <a href="{% url 'fulfill_request' req.id %}" class="btn btn-fulfill">Mark Fulfilled</a>
-                        {% else %}
-                           <a href="{% url 'fulfill_request' req.id %}" class="btn btn-unfulfill" >Fulfilled</a>
-                        {% endif %}
-                        <a href="{% url 'delete_request' req.id %}" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this request?')">Delete</a>
-                    </li>
-                {% empty %}
-                    <li>No requests found.</li>
-                {% endfor %}
-            </ul>
-
         </section>
-
-        
     </main>
 </body>
 </html>

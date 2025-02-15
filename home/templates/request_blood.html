@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Blood Donation {% endblock %}
+
+{% block title %}
+    Request For Blood
+{% endblock %}
 
 {% block css %}
-
+    <link rel="stylesheet" href="{% static 'css/request_blood.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -82,7 +85,14 @@
                 date.setAttribute('max', maxDateFormatted);
               </script>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="confirmAction(event, 'Are you sure you want to Submit the request?')">Submit</button>
+        <script>
+            function confirmAction(event, message) {
+                if (!confirm(message)) {
+                    event.preventDefault(); 
+                }
+            }
+        </script>
     </form>
 </div>
 {% endblock %}
