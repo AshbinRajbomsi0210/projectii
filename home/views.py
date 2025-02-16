@@ -268,9 +268,12 @@ def delete_donor(request, donor_id):
 @user_passes_test(is_admin)
 def fulfill_request(request, request_id):
     blood_request = get_object_or_404(RequestBlood, id=request_id)
-    blood_request.is_fulfilled = not blood_request.is_fulfilled
+    blood_request.is_fulfilled = not blood_request.is_fulfilled  # Toggle status
     blood_request.save()
-    messages.success(request, f"Request from {blood_request.name} has been marked as fulfilled.")
+    
+    status_message = "fulfilled" if blood_request.is_fulfilled else "not fulfilled"
+    messages.success(request, f"Request from {blood_request.name} has been marked as {status_message}.")
+    
     return redirect('manage_requests')
 
 @login_required(login_url='/login')
@@ -284,3 +287,35 @@ def delete_request(request, request_id):
 def blood_banks(request):
     banks = BloodBank.objects.all()  # Fetch all blood banks from DB
     return render(request, 'blood_banks.html', {'banks': banks})
+
+@login_required
+def approve_donor(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donor.is_approved = True
+    donor.save()
+    messages.success(request, "Donor approved successfully!")
+    return redirect('admin_dashboard')
+
+@login_required
+def unapprove_donor(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donor.is_approved = False
+    donor.save()
+    messages.success(request, "Donor unapproved successfully!")
+    return redirect('admin_dashboard')
+
+@login_required
+def approve_request(request, request_id):
+    req = get_object_or_404(RequestBlood, id=request_id)
+    req.is_approved = True
+    req.save()
+    messages.success(request, "Request approved successfully!")
+    return redirect('admin_dashboard')
+
+@login_required
+def unapprove_request(request, request_id):
+    req = get_object_or_404(RequestBlood, id=request_id)
+    req.is_approved = False
+    req.save()
+    messages.success(request, "Request unapproved successfully!")
+    return redirect('admin_dashboard')

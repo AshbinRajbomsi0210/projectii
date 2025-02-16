@@ -16,6 +16,7 @@ class RequestBlood(models.Model):
     blood_group = models.ForeignKey(BloodGroup, on_delete=models.CASCADE)
     date = models.DateField(max_length=100, blank=True)
     is_fulfilled = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False) 
 
     def __str__(self):
         return self.name
@@ -32,7 +33,7 @@ class Donor(models.Model):
     image = models.ImageField(upload_to="")
     report = models.FileField(upload_to="")
     ready_to_donate = models.BooleanField(default=True)
-    # is_approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
     # is_blocked = models.BooleanField(default=False) 
 
     def __str__(self):

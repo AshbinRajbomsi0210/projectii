@@ -33,35 +33,49 @@
             </div>
         {% endif %}
 
-        <!-- Donor Management Section -->
-        <section class="section-container">
-            <h2>Donor Management</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Donor Name</th>
-                            <th>Blood Group</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for donor in donors %}
-                            <tr>
-                                <td>{{ donor.donor.first_name }} {{ donor.donor.last_name }}</td>
-                                <td>{{ donor.blood_group }}</td>
-                                <td> <a href="{% url 'delete_donor' donor.id %}" class="btn btn-delete" onclick="confirmAction(event, 'Are you sure you want to delete this donor? This action cannot be undone.')">Delete</a>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="5">No donors found.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        <!-- Donor Management -->
+<section class="section-container">
+    <h2>Donor Management</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor Name</th>
+                    <th>Blood Group</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donor in donors %}
+                    <tr>
+                        <td>{{ donor.donor.first_name }} {{ donor.donor.last_name }}</td>
+                        <td>{{ donor.blood_group }}</td>
+                        <td class="{% if donor.is_approved %}approved{% else %}pending{% endif %}">
+                            {% if donor.is_approved %}
+                                Approved
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not donor.is_approved %}
+                                <a href="{% url 'approve_donor' donor.id %}" class="btn btn-approve" onclick="confirmAction(event, 'Approve this donor?')">Approve</a>
+                            {% else %}
+                                <a href="{% url 'unapprove_donor' donor.id %}" class="btn btn-unapprove" onclick="confirmAction(event, 'Unapprove this donor?')">Unapprove</a>
+                            {% endif %}
+                            <a href="{% url 'delete_donor' donor.id %}" class="btn btn-delete" onclick="confirmAction(event, 'Delete this donor?')">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No donors found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
 
         <!-- Blood Request Management Section -->
         <section class="section-container">

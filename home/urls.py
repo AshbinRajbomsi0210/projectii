@@ -22,7 +22,10 @@ urlpatterns = [
     path('custom_admin/delete_request/<int:request_id>/', views.delete_request, name='delete_request'),
     path('custom_admin/manage_donors/', views.manage_donors, name='manage_donors'),
     path('custom_admin/manage_requests/', views.manage_donors, name='manage_requests'),
-    
+    path('approve_donor/<int:donor_id>/', views.approve_donor, name='approve_donor'),
+    path('unapprove_donor/<int:donor_id>/', views.unapprove_donor, name='unapprove_donor'),
+    path('approve_request/<int:request_id>/', views.approve_request, name='approve_request'),
+    path('unapprove_request/<int:request_id>/', views.unapprove_request, name='unapprove_request'),
 ]
 
 
