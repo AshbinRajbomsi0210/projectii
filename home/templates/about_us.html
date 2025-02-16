@@ -38,11 +38,62 @@
     <h4>Contact Us</h4>
     <p>If you have any questions or want to learn more about our platform, feel free to <a href="/contact-us">contact us</a>.</p>
 
-    <div class="team-section">
+      <br>
+      <br>
+      <br>
+
+   <div class="team-section">
         <h4>Meet Our Team</h4>
         <p>Our dedicated team works tirelessly to ensure a smooth and efficient platform for blood donation. Together, we are driven by the shared goal of saving lives.</p>
-        <!-- Add team member details if needed -->
+        <div class="team-container">
+            <div class="team-member">
+                <img src="{% static '\media\pp.jpg' %}" alt="Ashbin Rajbomsi" >
+                <strong>Ashbin Rajbomsi</strong>
+            </div>
+            <div class="team-member">
+                <img src="{% static '\media\santosh.jpg' %}" alt="Santosh Baniya">
+                <strong>Santosh Baniya</strong>
+            </div>
+            <div class="team-member">
+                <img src="{% static '\media\sadin2.jpg' %}" alt="Sadin Thapa Magar">
+                <strong>Sadin Thapa Magar</strong>
+            </div>
+            <div class="team-member">
+                <img src="{% static '\media\dhiren2.jpg' %}" alt="Dhiren Sen Thakuri">
+                <strong>Dhiren Sen Thakuri</strong>
+            </div>
+            <div class="team-member">
+                <img src="{% static '\media\awan2.jpg' %}" alt="Awan Poudel">
+                <strong>Awan Poudel</strong>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock %}
 
+    <style>
+    .team-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .team-member {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        width: 200px;
+    }
+    .team-member img {
+        width: 100%;
+        border-radius: 10%;
+        margin-bottom: 10px;
+    }
+    .team-member strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}

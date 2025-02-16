@@ -138,7 +138,82 @@
           width: 100%;
       }
   }
-  
+ .container2 {
+    display: flex;
+    padding: 50px;
+    gap: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+}
+.section {
+    flex: 1;
+    padding: 20px;
+}
+.left img, .right img {
+    width: 60%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+h2 {
+    color: #b10000;
+    font-weight: bold;
+    font-size: 30px;
+}
+ul li {
+    margin-bottom: 10px;
+    font-size: 23px;
+}
+ p{
+    font-size: 23px;
+ }
+.info {
+    margin-top: 10px;
+    font-size: 23px;
+}
+
+.banner {
+    background: url( "{% static '\media\banner.jpg' %}") center/cover no-repeat;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+.banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* White overlay */
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+}
+
+h1 span {
+    font-weight: bold;
+    color: black;
+}
+
+.highlight {
+    color: #b10000;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+} 
 </style>
 {% endblock %}
 
@@ -180,6 +255,7 @@
   </div>
 </div>
 
+
 <script>
   // Search functionality
   document.getElementById('searchBox').addEventListener('input', function() {
@@ -190,5 +266,37 @@
     });
   });
 </script>
+<div class="container2">
+        <div class="section left">
+            <img src="{% static '\media\bloodbag.webp' %}" alt="Blood Bags">
+            <h2>Recovery and Time <br>Between Donations</h2>
+            <p>You must wait for at least eight weeks (56 days) between donations of whole blood and 16 weeks (112 days) between Power Red donations. Platelet apheresis donors may give every 7 days up to 24 times per year after a donation. Most people's hemoglobin levels are back to normal after 6 to 12 weeks.</p>
+            <p class="info">A blood transfusion can be a life-saving treatment for patients with cancer, patients undergoing surgery, children with severe anemia, women who have complications.</p>
+        </div>
+        <div class="section right">
+            <h2>More Donation <br>More Health Benefits</h2>
+            <br>
+            <ul>
+                <li>Maintains Iron Level</li>
+                <li>Stimulates Blood Cell Production</li>
+                <li>Preserves Cardiovascular Health</li>
+                <li>Reduces Risk of Heart Attack And Cancer</li>
+                <li>Gives You a Sense of Pride</li>
+                <li>Free blood analysis</li>
+            </ul>
+            <br>
+            <br>
+            <br>   
+            <br>        
+         <img src="{% static '\media\camp2.jpg'%}" alt="Facts and Stats">
+        </div>
+    </div>
+       <div class="banner">
+        <div class="content">
+            <h1>You don’t always have to be a doctor <br> to <span>SAVE</span> someone’s <span>LIFE</span>!</h1>
+            <p class="highlight">Donate Blood Save Life!</p>
+        </div>
+    </div>
+
 
 {% endblock %}
